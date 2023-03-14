@@ -8,6 +8,7 @@ import {
 } from 'react'
 import {
   addNewCycleAction,
+  interruptCurrentCycleAction,
   markCurrentCycleAsFinishedAction,
 } from '../reducers/cycles/actions'
 import { Cycle, cyclesReducer } from '../reducers/cycles/reducer'
@@ -43,7 +44,7 @@ export function CyclesContextProvider({
       cycles: [],
       activeCycleId: null,
     },
-    () => {
+    (initialState) => {
       const storageStateAsJson = localStorage.getItem(
         '@ignite-timer:cycles-state',
       )
@@ -51,6 +52,8 @@ export function CyclesContextProvider({
       if (storageStateAsJson) {
         return JSON.parse(storageStateAsJson)
       }
+
+      return initialState
     },
   )
 
@@ -85,11 +88,11 @@ export function CyclesContextProvider({
   }
 
   function interruptCurrentCycle() {
-    dispatch(markCurrentCycleAsFinishedAction())
+    dispatch(interruptCurrentCycleAction())
   }
 
   function markCurrentCycleAsFinished() {
-    dispatch(interruptCurrentCycle())
+    dispatch(markCurrentCycleAsFinishedAction())
   }
 
   return (
